@@ -95,6 +95,8 @@ func init() {
 		function.RightFunction,
 		function.SubstringFunction,
 		function.SubstringWithLengthFunction,
+		function.HasPrefixFunction,
+		function.HasSuffixFunction,
 	} {
 		if err := globalFunctionTable.AddFunction(fn); err != nil {
 			panic(err)

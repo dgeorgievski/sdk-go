@@ -175,3 +175,25 @@ var SubstringWithLengthFunction function = function{
 		return str[beginning:end], nil
 	},
 }
+
+var HasPrefixFunction function = function{
+	name:      "HASPREFIX",
+	fixedArgs: []cesql.Type{cesql.StringType, cesql.StringType},
+	fn: func(event cloudevents.Event, i []interface{}) (interface{}, error) {
+		str := i[0].(string)
+		prefix := i[1].(string)
+
+		return strings.HasPrefix(str, prefix), nil
+	},
+}
+
+var HasSuffixFunction function = function{
+	name:      "HASSUFFIX",
+	fixedArgs: []cesql.Type{cesql.StringType, cesql.StringType},
+	fn: func(event cloudevents.Event, i []interface{}) (interface{}, error) {
+		str := i[0].(string)
+		suffix := i[1].(string)
+
+		return strings.HasSuffix(str, suffix), nil
+	},
+}

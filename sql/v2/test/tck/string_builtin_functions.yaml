@@ -140,3 +140,35 @@ tests:
     expression: "SUBSTRING('abcdef', -10, 10)"
     result: ""
     error: functionEvaluation
+
+  - name: HASPREFIX (1)
+    expression: "HASPREFIX('abcdef', 'ab')"
+    result: true
+  - name: HASPREFIX (2)
+    expression: "HASPREFIX('abcdef', 'abcdef')"
+    result: true  
+  - name: HASPREFIX (3)
+    expression: "HASPREFIX('abcdef', '')"
+    result: true  
+  - name: HASPREFIX (4)
+    expression: "HASPREFIX('abcdef', 'gh')"
+    result: false  
+  - name: HASPREFIX (5)
+    expression: "HASPREFIX('abcdef', 'abcdefg')"
+    result: false
+
+  - name: HASSUFFIX (1)
+    expression: "HASSUFFIX('abcdef', 'ef')"
+    result: true
+  - name: HASSUFFIX (2)
+    expression: "HASSUFFIX('abcdef', 'abcdef')"
+    result: true 
+  - name: HASSUFFIX (3)
+    expression: "HASSUFFIX('abcdef', '')"
+    result: true  
+  - name: HASSUFFIX (4)
+    expression: "HASPREFIX('abcdef', 'gh')"
+    result: false  
+  - name: HASSUFFIX (5)
+    expression: "HASSUFFIX('abcdef', 'abcdefg')"
+    result: false

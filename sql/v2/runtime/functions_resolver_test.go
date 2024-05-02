@@ -6,17 +6,19 @@
 package runtime
 
 import (
+	"os"
 	"strings"
 	"testing"
 
-	cloudevents "github.com/cloudevents/sdk-go"
 	cesql "github.com/cloudevents/sdk-go/sql/v2"
 	"github.com/cloudevents/sdk-go/sql/v2/function"
+	cloudevents "github.com/cloudevents/sdk-go/v2"
 )
 
-func Test_functionTable_AddFunction(t *testing.T) {
+var HasPrefixCustomFunction cesql.Function
 
-	var HasPrefixFunction cesql.Function = function.NewFunction(
+func TestMain(m *testing.M) {
+	HasPrefixCustomFunction = function.NewFunction(
 		"HASPREFIX",
 		[]cesql.Type{cesql.StringType, cesql.StringType},
 		nil,
@@ -27,8 +29,10 @@ func Test_functionTable_AddFunction(t *testing.T) {
 			return strings.HasPrefix(str, prefix), nil
 		},
 	)
+	os.Exit(m.Run())
+}
 
-	AddFunction(HasPrefixFunction)
+func Test_functionTable_AddFunction(t *testing.T) {
 
 	type args struct {
 		function cesql.Function
@@ -40,18 +44,18 @@ func Test_functionTable_AddFunction(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:  "Add HASPREFIX",
+			name:  "Add custom fixedArgs func",
 			table: globalFunctionTable,
 			args: args{
-				function: HasPrefixFunction,
+				function: HasPrefixCustomFunction,
 			},
 			wantErr: false,
 		},
 		{
-			name:  "Fail add, HASPREFIX exists",
+			name:  "Fail add custom fixedArgs func if it exists",
 			table: globalFunctionTable,
 			args: args{
-				function: HasPrefixFunction,
+				function: HasPrefixCustomFunction,
 			},
 			wantErr: true,
 		},
@@ -60,26 +64,6 @@ func Test_functionTable_AddFunction(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := tt.table.AddFunction(tt.args.function); (err != nil) != tt.wantErr {
 				t.Errorf("functionTable.AddFunction() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
-	}
-}
-
-func TestAddFunction(t *testing.T) {
-	type args struct {
-		fn cesql.Function
-	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := AddFunction(tt.args.fn); (err != nil) != tt.wantErr {
-				t.Errorf("AddFunction() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
